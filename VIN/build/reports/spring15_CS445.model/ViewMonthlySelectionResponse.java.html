@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ViewMonthlySelectionResponse.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.model</a> &gt; <span class="el_source">ViewMonthlySelectionResponse.java</span></div><h1>ViewMonthlySelectionResponse.java</h1><pre class="source lang-java linenums">package spring15_CS445.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ViewMonthlySelectionResponse {
+	private int id;
+	private String selection_month;
+	private String type;
+	private String create_date;
+	private int created_by;
+<span class="fc" id="L12">	private List&lt;WineArray&gt; wines = new ArrayList&lt;WineArray&gt;();</span>
+	
+<span class="fc" id="L14">	public ViewMonthlySelectionResponse(int vmsid,String ym,String tp,String cdate,int cb,List&lt;Wine&gt; w){</span>
+<span class="fc" id="L15">		setId(vmsid);</span>
+<span class="fc" id="L16">		setSm(ym);</span>
+<span class="fc" id="L17">		setType(tp);</span>
+<span class="fc" id="L18">		setCd(cdate);</span>
+<span class="fc" id="L19">		setCreatedBy(cb);</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">		for(int i=0;i&lt;w.size();i++){</span>
+<span class="nc" id="L21">			wines.add(new WineArray(w.get(i).getID(),w.get(i).getLabelName()));</span>
+		}
+<span class="fc" id="L23">	}</span>
+	
+	public int getId() {
+<span class="fc" id="L26">		return id;</span>
+	}
+	
+	public void setId(int id) {
+<span class="fc" id="L30">		this.id = id;</span>
+<span class="fc" id="L31">	}</span>
+	public String getSm() {
+<span class="fc" id="L33">		return selection_month;</span>
+	}
+	public void setSm(String sm) {
+<span class="fc" id="L36">		this.selection_month = sm;</span>
+<span class="fc" id="L37">	}</span>
+	public String getType() {
+<span class="fc" id="L39">		return type;</span>
+	}
+	public void setType(String type) {
+<span class="fc" id="L42">		this.type = type;</span>
+<span class="fc" id="L43">	}</span>
+	public String getCd() {
+<span class="fc" id="L45">		return create_date;</span>
+	}
+	public void setCd(String cd) {
+<span class="fc" id="L48">		this.create_date = cd;</span>
+<span class="fc" id="L49">	}</span>
+	public int getCreatedBy() {
+<span class="fc" id="L51">		return created_by;</span>
+	}
+	public void setCreatedBy(int createdBy) {
+<span class="fc" id="L54">		this.created_by = createdBy;</span>
+<span class="fc" id="L55">	}</span>
+	public List&lt;WineArray&gt; getWa() {
+<span class="fc" id="L57">		return wines;</span>
+	}
+	public void setWa(List&lt;WineArray&gt; wa) {
+<span class="fc" id="L60">		this.wines = wa;</span>
+<span class="fc" id="L61">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

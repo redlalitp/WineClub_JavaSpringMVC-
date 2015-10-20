@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ModifyNote.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.controller</a> &gt; <span class="el_source">ModifyNote.java</span></div><h1>ModifyNote.java</h1><pre class="source lang-java linenums">package spring15_CS445.controller;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import spring15_CS445.model.Errors;
+import spring15_CS445.model.Note;
+import spring15_CS445.model.Shipment;
+import spring15_CS445.model.Subscriber;
+import spring15_CS445.model.SubscriberResponse;
+import spring15_CS445.model.Validations;
+import spring15_CS445.model.VinClub;
+@RestController
+@RequestMapping(value = &quot;/sub&quot;)
+<span class="fc" id="L29">public class ModifyNote {</span>
+	private Note n;
+<span class="fc" id="L31">	SubscriberResponse response = new SubscriberResponse(); </span>
+	
+	@RequestMapping(value = &quot;/{id}/wines/{wid}/notes/{nid}&quot;,method = RequestMethod.PUT)
+	public  @ResponseBody ResponseEntity&lt;String&gt; AddWineNote(@PathVariable(&quot;id&quot;) int id,
+															 @PathVariable(&quot;wid&quot;) Long wid,
+															 @PathVariable(&quot;nid&quot;) Long nid,
+															 @RequestBody String json) {
+<span class="fc" id="L38">		JSONObject obj = new JSONObject(json);</span>
+<span class="fc" id="L39">		String content = obj.getString(&quot;content&quot;);</span>
+<span class="fc" id="L40">		int flag =0;</span>
+<span class="fc" id="L41">		List&lt;Subscriber&gt; list = new ArrayList&lt;Subscriber&gt;(VinClub.subs);</span>
+<span class="fc" id="L42">		List&lt;Shipment&gt; shipments = new ArrayList&lt;Shipment&gt;();</span>
+		
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		for(int i=0;i&lt;list.size();i++ ){</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">		    if(id == list.get(i).getID()){</span>
+<span class="nc" id="L46">		    	shipments = list.get(i).getShipmentList();</span>
+<span class="nc" id="L47">		        flag = 1;</span>
+<span class="nc" id="L48">		    	break;</span>
+		    }
+		   }
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">		if(flag == 0){</span>
+<span class="fc" id="L52">			response.errors.add(new Errors(1021,&quot;No subscriber with id&quot;+id));</span>
+<span class="fc" id="L53">			Gson gson = new GsonBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L54">			   String res = gson.toJson(response);</span>
+<span class="fc" id="L55">			return new ResponseEntity&lt;String&gt;(res,HttpStatus.NOT_FOUND);</span>
+		}
+<span class="nc" id="L57">		flag  = 0;	</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		for(int i=0;i&lt;shipments.size();i++ )</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">			for(int j=0;j&lt;shipments.get(i).getWines().size();j++ ){</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		      if(wid == shipments.get(i).getWines().get(j).getID()){</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		    	  for(int k=0;k&lt;shipments.get(i).getWines().get(j).getNotes().size();k++ ){</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">				      if(nid == shipments.get(i).getWines().get(j).getNotes().get(k).getId()){</span>
+<span class="nc" id="L63">				    	  shipments.get(i).getWines().get(j).getNotes().get(k).setContent(content);</span>
+<span class="nc" id="L64">				    	  return new ResponseEntity&lt;String&gt;(HttpStatus.OK);</span>
+				      }
+		    	  }
+		      }
+			}
+<span class="nc" id="L69">			return new ResponseEntity&lt;String&gt;(HttpStatus.NOT_FOUND);</span>
+			
+		}
+	
+	@RequestMapping(value = &quot;/{id}/shipments/{sid}/notes/{nid}&quot;,method = RequestMethod.PUT)
+	public  @ResponseBody ResponseEntity&lt;String&gt; AddNote(@PathVariable(&quot;id&quot;) int id,
+														 @PathVariable(&quot;sid&quot;) Long sid,
+														 @PathVariable(&quot;nid&quot;) Long nid,
+														 @RequestBody String json) {
+		
+<span class="fc" id="L79">		JSONObject obj = new JSONObject(json);</span>
+<span class="fc" id="L80">		String content = obj.getString(&quot;content&quot;);</span>
+<span class="fc" id="L81">		int flag =0;</span>
+<span class="fc" id="L82">		List&lt;Subscriber&gt; list = new ArrayList&lt;Subscriber&gt;(VinClub.subs);</span>
+<span class="fc" id="L83">		List&lt;Shipment&gt; shipments = new ArrayList&lt;Shipment&gt;();</span>
+		
+<span class="fc" id="L85">		n = new Note(content);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		for(int i=0;i&lt;list.size();i++ ){</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">		    if(id == list.get(i).getID()){</span>
+<span class="nc" id="L88">		    	shipments = list.get(i).getShipmentList();</span>
+<span class="nc" id="L89">		        flag = 1;</span>
+<span class="nc" id="L90">		    	break;</span>
+		    }
+		   }
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">		if(flag == 0){</span>
+<span class="fc" id="L94">			response.errors.add(new Errors(1021,&quot;No subscriber with id&quot;+id));</span>
+<span class="fc" id="L95">			Gson gson = new GsonBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L96">			   String res = gson.toJson(response);</span>
+<span class="fc" id="L97">			return new ResponseEntity&lt;String&gt;(res,HttpStatus.NOT_FOUND);</span>
+		}
+<span class="nc" id="L99">		flag  = 0;	</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">		for(int i=0;i&lt;shipments.size();i++ )</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">			  if(sid == shipments.get(i).getSid()){</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">				  for(int j=0;j&lt;shipments.size();j++ )</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">					  if(nid == shipments.get(i).getNotes().get(j).getId()){</span>
+<span class="nc" id="L104">				    	  shipments.get(i).getNotes().get(j).setContent(content);</span>
+<span class="nc" id="L105">				    	  return new ResponseEntity&lt;String&gt;(HttpStatus.OK);</span>
+					  }
+			  }
+<span class="nc" id="L108">			return new ResponseEntity&lt;String&gt;(HttpStatus.NOT_FOUND);</span>
+			
+		}
+	}
+		
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

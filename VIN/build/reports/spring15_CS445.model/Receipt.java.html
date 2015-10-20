@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Receipt.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.model</a> &gt; <span class="el_source">Receipt.java</span></div><h1>Receipt.java</h1><pre class="source lang-java linenums">package spring15_CS445.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Receipt {
+	private int id;
+	private Date date;
+	private String time;
+	private int subscriber;
+	private String name;
+	private String recieved_by;
+	
+<span class="fc" id="L15">	public Receipt(){</span>
+<span class="fc" id="L16">		setID(IdGenerator.newID());</span>
+<span class="fc" id="L17">		setDt(new Date());</span>
+<span class="fc" id="L18">		setTOD(new Date().toString().split(&quot; &quot;)[3]);</span>
+<span class="fc" id="L19">	}</span>
+	
+<span class="fc" id="L21">	public Receipt(String name, int sid){</span>
+<span class="fc" id="L22">		List&lt;Subscriber&gt; list = new ArrayList&lt;Subscriber&gt;(VinClub.subs);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">		 for(int i=0;i&lt;list.size();i++ ){</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">			    if(sid == list.get(i).getID()){</span>
+<span class="fc" id="L25">			    	setSubName(list.get(i).getName());</span>
+			    }
+		  }
+<span class="fc" id="L28">		setID(IdGenerator.newID());</span>
+<span class="fc" id="L29">		setDt(new Date());</span>
+<span class="fc" id="L30">		setTOD(new Date().toString().split(&quot; &quot;)[3]);</span>
+<span class="fc" id="L31">		setRecieverName(name);</span>
+<span class="fc" id="L32">		setSubID(sid);</span>
+<span class="fc" id="L33">	}</span>
+
+	public int getID() {
+<span class="fc" id="L36">		return id;</span>
+	}
+
+	public void setID(int iD) {
+<span class="fc" id="L40">		id = iD;</span>
+<span class="fc" id="L41">	}</span>
+
+	public Date getDt() {
+<span class="fc" id="L44">		return date;</span>
+	}
+
+	public void setDt(Date dt) {
+<span class="fc" id="L48">		this.date = dt;</span>
+<span class="fc" id="L49">	}</span>
+
+	public String getTOD() {
+<span class="fc" id="L52">		return time;</span>
+	}
+
+	public void setTOD(String tOD) {
+<span class="fc" id="L56">		time = tOD;</span>
+<span class="fc" id="L57">	}</span>
+
+	public int getSubID() {
+<span class="fc" id="L60">		return subscriber;</span>
+	}
+
+	public void setSubID(int subID) {
+<span class="fc" id="L64">		this.subscriber = subID;</span>
+<span class="fc" id="L65">	}</span>
+
+	public String getSubName() {
+<span class="fc" id="L68">		return name;</span>
+	}
+
+	public void setSubName(String subName) {
+<span class="fc" id="L72">		this.name = subName;</span>
+<span class="fc" id="L73">	}</span>
+
+	public String getRecieverName() {
+<span class="fc" id="L76">		return recieved_by;</span>
+	}
+
+	public void setRecieverName(String recieverName) {
+<span class="fc" id="L80">		this.recieved_by = recieverName;</span>
+<span class="fc" id="L81">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

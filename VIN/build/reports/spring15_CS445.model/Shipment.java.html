@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Shipment.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.model</a> &gt; <span class="el_source">Shipment.java</span></div><h1>Shipment.java</h1><pre class="source lang-java linenums">package spring15_CS445.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Shipment {
+	private int sid;
+	private String status;
+	private String dt;
+	private WineVariety wt;
+<span class="fc" id="L11">	private List&lt;Wine&gt; wines = new ArrayList&lt;Wine&gt;();</span>
+<span class="fc" id="L12">	private List&lt;Note&gt; notes = new ArrayList&lt;Note&gt;();</span>
+	
+<span class="fc" id="L14">	public Shipment(WineVariety wt,String ym,List&lt;Wine&gt; wn){</span>
+<span class="fc" id="L15">		this.sid = IdGenerator.newID();</span>
+<span class="fc" id="L16">		this.setDt(ym);</span>
+<span class="fc" id="L17">		this.status = &quot;TBD&quot;;</span>
+<span class="fc" id="L18">		this.wt = wt;</span>
+<span class="fc" id="L19">		this.wines = wn;</span>
+<span class="fc" id="L20">	}</span>
+	
+	public int getSid() {
+<span class="fc" id="L23">		return sid;</span>
+	}
+	public void setSid(int sid) {
+<span class="fc" id="L26">		this.sid = sid;</span>
+<span class="fc" id="L27">	}</span>
+	public String getStatus() {
+<span class="fc" id="L29">		return status;</span>
+	}
+	public void setStatus(String status) {
+<span class="fc" id="L32">		this.status = status;</span>
+<span class="fc" id="L33">	}</span>
+	public WineVariety getWt() {
+<span class="fc" id="L35">		return wt;</span>
+	}
+	public void setWt(WineVariety wt) {
+<span class="fc" id="L38">		this.wt = wt;</span>
+<span class="fc" id="L39">	}</span>
+	public List&lt;Wine&gt; getWines() {
+<span class="fc" id="L41">		return wines;</span>
+	}
+	public void setWines(List&lt;Wine&gt; wines) {
+<span class="fc" id="L44">		this.wines = wines;</span>
+<span class="fc" id="L45">	}</span>
+	public List&lt;Note&gt; getNotes() {
+<span class="fc" id="L47">		return notes;</span>
+	}
+	public void setNotes(List&lt;Note&gt; notes) {
+<span class="fc" id="L50">		this.notes = notes;</span>
+<span class="fc" id="L51">	}</span>
+
+	public String getDt() {
+<span class="fc" id="L54">		return dt;</span>
+	}
+
+	public void setDt(String dt) {
+<span class="fc" id="L58">		this.dt = dt;</span>
+<span class="fc" id="L59">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

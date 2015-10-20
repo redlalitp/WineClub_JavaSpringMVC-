@@ -1,0 +1,40 @@
+
+
+sh run.sh
+This script runs code coverage,unit test cases, builds and deploys war to webapps folder.
+------------------------------------------------------------------------------------------
+
+If you want to run tasks individually, follow,
+
+
+
+For code coverage:------------------------------------------------------------------------
+
+cd coverage
+ant clean
+ant 
+the script will run.
+Check code coverage report at build/reports/index.html
+------------------------------------------------------------------------------------------
+
+
+For running tests and creating war file:--------------------------------------------------
+
+ant clean
+ant
+
+The above commands will generate war package. at /target directory.
+------------------------------------------------------------------------------------------
+
+
+
+Deploying war file:-----------------------------------------------------------------------
+We need to deploy .war file on apache tomcat server,
+for that we need to copy our war file to apache tomcat webapps folder.
+Move to target directory. 
+
+cd target
+sudo cp VIN.war /var/lib/tomcat7/webapps
+
+Now we can test.
+open browser!

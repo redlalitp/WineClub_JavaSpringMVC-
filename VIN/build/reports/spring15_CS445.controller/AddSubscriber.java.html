@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AddSubscriber.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.controller</a> &gt; <span class="el_source">AddSubscriber.java</span></div><h1>AddSubscriber.java</h1><pre class="source lang-java linenums">package spring15_CS445.controller;
+
+import java.util.Collection;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import spring15_CS445.model.Address;
+import spring15_CS445.model.Errors;
+import spring15_CS445.model.Subscriber;
+import spring15_CS445.model.SubscriberResponse;
+import spring15_CS445.model.Validations;
+import spring15_CS445.model.VinClub;
+
+@RestController
+@RequestMapping(value = &quot;/sub&quot;) 
+<span class="fc" id="L27">public class AddSubscriber{</span>
+	private Address a;
+	private Subscriber s;
+	private String name,email, phone, twitter, facebook;
+	private String street, city, state, zip;
+<span class="fc" id="L32">	private SubscriberResponse response = new SubscriberResponse();</span>
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity&lt;String&gt; addAccount(@RequestBody String json) {
+<span class="fc" id="L36">		JSONObject obj = new JSONObject(json);</span>
+<span class="fc" id="L37">		this.name = obj.getString(&quot;name&quot;);</span>
+<span class="fc" id="L38">		this.email = obj.getString(&quot;email&quot;);</span>
+<span class="fc" id="L39">		this.phone = obj.getString(&quot;phone&quot;);</span>
+<span class="fc" id="L40">		this.facebook = obj.getString(&quot;facebook&quot;);</span>
+<span class="fc" id="L41">		this.twitter = obj.getString(&quot;twitter&quot;);</span>
+<span class="fc" id="L42">		JSONObject addr = obj.getJSONObject(&quot;address&quot;);</span>
+<span class="fc" id="L43">		this.street = addr.getString(&quot;street&quot;);</span>
+<span class="fc" id="L44">		this.city = addr.getString(&quot;city&quot;);</span>
+<span class="fc" id="L45">		this.state = addr.getString(&quot;state&quot;);</span>
+<span class="fc" id="L46">		this.zip = addr.getString(&quot;zip&quot;);</span>
+<span class="fc" id="L47">		a = new Address(this.street, this.city, this.state, this.zip);</span>
+<span class="fc" id="L48">		s = new Subscriber (this.name, this.email, this.phone, a, this.facebook, this.twitter);</span>
+<span class="fc" id="L49">		Validations v = new Validations();</span>
+	
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">		if(v.isblank(this.street)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No Street address specified&quot;);
+<span class="nc" id="L53">		    response.errors.add(new Errors(1004,&quot;Address must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">		if(v.isblank(this.city)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No city specified&quot;);
+<span class="nc" id="L57">			response.errors.add(new Errors(1006,&quot;City must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">		if(v.isblank(this.state)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No state specified&quot;);
+<span class="nc" id="L61">			response.errors.add(new Errors(1008,&quot;State must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">		if(v.isblank(this.zip)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No zip code specified&quot;);
+<span class="nc" id="L65">			response.errors.add(new Errors(1010,&quot;Zip code must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		if(v.isblank(this.name)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No subscriber name specified&quot;);
+<span class="nc" id="L69">			response.errors.add(new Errors(1000,&quot;Name must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">		if(v.isblank(this.email)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No email specified&quot;);
+<span class="nc" id="L73">			response.errors.add(new Errors(1002,&quot;Email must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">		if(v.isblank(this.phone)){</span>
+			//return new AddSubscriberResponse(0, false, &quot;No phone number specified&quot;);
+<span class="nc" id="L77">			response.errors.add(new Errors(1012,&quot;Phone number must be provided&quot;));</span>
+		}
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">		if (v.addressInBannedState(a)) {</span>
+			//return new AddSubscriberResponse(0, false, &quot;Cannot ship to this state&quot;);
+<span class="nc" id="L81">			response.errors.add(new Errors(1009,&quot;Cannot ship to this state&quot;));</span>
+		}
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">		if (v.userHasAccount(VinClub.subs, s)) {</span>
+			//return new AddSubscriberResponse(0, false, &quot;User already has an account&quot;);
+<span class="nc" id="L85">			response.errors.add(new Errors(1014,&quot;User with this email address already has an account&quot;));</span>
+		}
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if(v.isInvalidName(s.getName())) {</span>
+			//return new AddSubscriberResponse(0, false, &quot;Invalid or no name provided&quot;);
+<span class="fc" id="L89">			response.errors.add(new Errors(1001,&quot;Invalid name&quot;));</span>
+		}
+<span class="fc bfc" id="L91" title="All 2 branches covered.">		if(v.isInvalidEmail(s.getEmail())) {</span>
+			//return new AddSubscriberResponse(0, false, &quot;Invalid or no email address provided&quot;);
+<span class="fc" id="L93">			response.errors.add(new Errors(1003,&quot;Invalid email address&quot;));</span>
+		}
+		/*if(v.isInvalidStreet(a)) {
+			//return new AddSubscriberResponse(1005, false, &quot;Invalid street&quot;);
+			response.errors.add(new Errors(1005,&quot;Invalid address&quot;));
+		}*/
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">		if(v.isInvalidCity(a)) {</span>
+			//return new AddSubscriberResponse(0, false, &quot;Invalid city name&quot;);
+<span class="nc" id="L101">			response.errors.add(new Errors(1007,&quot;Invalid city&quot;));</span>
+		}
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		if(v.isInvalidZipCode(a)) {</span>
+			//return new AddSubscriberResponse(0, false, &quot;Invalid zip code&quot;);
+<span class="nc" id="L105">			response.errors.add(new Errors(1011,&quot;Invalid zip code&quot;));</span>
+		}
+		/*if(v.isInvalidPhone(s.getPhone())) {
+			//return new AddSubscriberResponse(0, false, &quot;Invalid phone number&quot;);
+			response.errors.add(new Errors(1017,&quot;Invalid phone number&quot;));
+		}*/
+<span class="fc bfc" id="L111" title="All 2 branches covered.">		if(response.getErrors().isEmpty()){</span>
+<span class="fc" id="L112">			VinClub.subs.add(s);</span>
+<span class="fc" id="L113">			response.setID(s.getID());</span>
+<span class="fc" id="L114">			Gson gson = new GsonBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L115">			   String res = gson.toJson(response);</span>
+<span class="fc" id="L116">			   return new ResponseEntity&lt;String&gt;(res,HttpStatus.OK);</span>
+		}else{
+<span class="fc" id="L118">			response.setID(-1);</span>
+<span class="fc" id="L119">			Gson gson = new GsonBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L120">			   String res = gson.toJson(response);</span>
+<span class="fc" id="L121">			   return new ResponseEntity&lt;String&gt;(res,HttpStatus.BAD_REQUEST);</span>
+			
+		}
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

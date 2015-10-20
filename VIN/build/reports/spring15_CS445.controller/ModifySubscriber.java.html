@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ModifySubscriber.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.controller</a> &gt; <span class="el_source">ModifySubscriber.java</span></div><h1>ModifySubscriber.java</h1><pre class="source lang-java linenums">package spring15_CS445.controller;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+
+import spring15_CS445.model.Address;
+import spring15_CS445.model.Errors;
+import spring15_CS445.model.Subscriber;
+import spring15_CS445.model.SubscriberResponse;
+import spring15_CS445.model.Validations;
+import spring15_CS445.model.VinClub;
+
+@RestController
+@RequestMapping(value = &quot;/sub&quot;) 
+<span class="fc" id="L29">public class ModifySubscriber {</span>
+	private String name,email, phone, twitter, facebook;
+<span class="fc" id="L31">	SubscriberResponse response = new SubscriberResponse(); </span>
+	
+	@RequestMapping(value = &quot;/{id}&quot;,method = RequestMethod.PUT)
+	public @ResponseBody ResponseEntity&lt;String&gt; ModifyAccount(@PathVariable int id,@RequestBody String json) {
+		
+<span class="fc" id="L36">		List&lt;Subscriber&gt; list = new ArrayList&lt;Subscriber&gt;(VinClub.subs);</span>
+<span class="fc" id="L37">		Validations v = new Validations();</span>
+<span class="fc" id="L38">		Subscriber s1 = new Subscriber();</span>
+<span class="fc" id="L39">		JSONObject obj = new JSONObject(json);</span>
+		
+<span class="fc" id="L41">		this.name = obj.getString(&quot;name&quot;);</span>
+<span class="fc" id="L42">		this.email = obj.getString(&quot;email&quot;);</span>
+<span class="fc" id="L43">		this.phone = obj.getString(&quot;phone&quot;);</span>
+<span class="fc" id="L44">		this.facebook = obj.getString(&quot;facebook&quot;);</span>
+<span class="fc" id="L45">		this.twitter = obj.getString(&quot;twitter&quot;);</span>
+		
+		   // check values
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		   for(int i=0;i&lt;list.size();i++ ){</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">		    if(id == list.get(i).getID()){</span>
+<span class="nc" id="L50">		    	s1 = list.get(i);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		    	if(v.isblank(this.name)){</span>
+<span class="nc" id="L52">					response.errors.add(new Errors(1000,&quot;Name must be provided&quot;));</span>
+				}
+<span class="nc bnc" id="L54" title="All 2 branches missed.">				if(v.isblank(this.email)){</span>
+<span class="nc" id="L55">					response.errors.add(new Errors(1002,&quot;Email must be provided&quot;));</span>
+				}
+<span class="nc bnc" id="L57" title="All 2 branches missed.">				if(v.isblank(this.phone)){</span>
+<span class="nc" id="L58">					response.errors.add(new Errors(1012,&quot;Phone number must be provided&quot;));</span>
+				}
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if(v.isInvalidName(this.name)) {</span>
+<span class="nc" id="L61">					response.errors.add(new Errors(1001,&quot;Invalid name&quot;));</span>
+				}
+<span class="nc bnc" id="L63" title="All 2 branches missed.">				if(v.isInvalidEmail(this.email)) {</span>
+<span class="nc" id="L64">					response.errors.add(new Errors(1003,&quot;Invalid email address&quot;));</span>
+				}
+				/*if(v.isInvalidPhone(this.phone)) {
+					response.errors.add(new Errors(1017,&quot;Invalid phone number&quot;));
+				}*/
+				
+<span class="nc bnc" id="L70" title="All 2 branches missed.">				if(response.getErrors().isEmpty()){</span>
+<span class="nc" id="L71">					s1.updateInfo(this.name, this.email, this.phone);</span>
+<span class="nc" id="L72">					list.remove(i);</span>
+<span class="nc" id="L73">					list.add(s1);</span>
+<span class="nc" id="L74">					Set&lt;Subscriber&gt; set = new HashSet&lt;Subscriber&gt;(list);</span>
+<span class="nc" id="L75">					VinClub.subs = (HashSet&lt;Subscriber&gt;) set;</span>
+<span class="nc" id="L76">					return new ResponseEntity&lt;String&gt;(HttpStatus.OK);</span>
+				}else{
+<span class="nc" id="L78">					response.setID(-1);</span>
+<span class="nc" id="L79">					Gson gson = new Gson();</span>
+<span class="nc" id="L80">					   String res = gson.toJson(response);</span>
+<span class="nc" id="L81">					return new ResponseEntity&lt;String&gt;(res,HttpStatus.BAD_REQUEST);</span>
+					
+				}
+		    	
+		    }
+		    	
+		   }
+<span class="fc" id="L88">		   return new ResponseEntity&lt;String&gt;(HttpStatus.NOT_FOUND);</span>
+		  }
+		
+		
+		
+	}
+	
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

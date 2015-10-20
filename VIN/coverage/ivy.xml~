@@ -1,0 +1,24 @@
+<ivy-module version="2.0">
+    <info organisation="org.adrian" module="demo"/>
+ 
+    <configurations defaultconfmapping="compile->default">
+        <conf name="compile" description="Required to compile application"/>
+        <conf name="test"    description="Required for test only" extends="compile"/>
+        <conf name="build"   description="Build dependencies"/>
+    </configurations>
+ 
+    <dependencies>
+        <!-- compile dependencies -->
+        <!-- set up your classpath here-->
+ 
+        <!-- test dependencies -->
+        <dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
+ 
+        <!-- build dependencies -->
+        <dependency org="org.codehaus.sonar-plugins" name="sonar-ant-task" rev="2.2" conf="build->default"/>
+        <dependency org="org.jacoco" name="org.jacoco.ant" rev="0.7.2.201409121644" conf="build->default"/> 
+ 
+        <!-- Global exclusions -->
+        <exclude org="org.apache.ant"/>
+    </dependencies>
+</ivy-module>

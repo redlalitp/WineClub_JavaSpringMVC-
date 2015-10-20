@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Subscriber.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coverage Report</a> &gt; <a href="index.source.html" class="el_package">spring15_CS445.model</a> &gt; <span class="el_source">Subscriber.java</span></div><h1>Subscriber.java</h1><pre class="source lang-java linenums">package spring15_CS445.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Subscriber {
+    private String name, email, phone, twitter, facebook;
+    private Address address;
+    private MonthlySelectionType mst;
+    private int ID;
+    private Date dt;
+    private String tod;
+    private String dow;
+<span class="fc" id="L15">    private List&lt;Shipment&gt; shipmentList = new ArrayList&lt;Shipment&gt;();</span>
+   // private List&lt;Note&gt; notes = new ArrayList&lt;Note&gt;();
+<span class="fc" id="L17">    public Subscriber() {</span>
+<span class="fc" id="L18">    	this.setName(&quot;Jane Doe&quot;);</span>
+<span class="fc" id="L19">    	this.setEmail(&quot;jane.doe@example.com&quot;);</span>
+<span class="fc" id="L20">    	this.setPhone(&quot;1234567890&quot;);</span>
+<span class="fc" id="L21">    	this.setAddress(new Address());</span>
+<span class="fc" id="L22">    	this.mst = MonthlySelectionType.RW;</span>
+<span class="fc" id="L23">    	this.ID = IdGenerator.newID();</span>
+<span class="fc" id="L24">    	this.tod = &quot;Fri&quot;;</span>
+<span class="fc" id="L25">    	this.dow = &quot;PM&quot;;</span>
+<span class="fc" id="L26">    }</span>
+<span class="fc" id="L27">    public Subscriber (String name, String email, String phone, Address address) {</span>
+<span class="fc" id="L28">    	this.setName(name);</span>
+<span class="fc" id="L29">    	this.setEmail(email);</span>
+<span class="fc" id="L30">    	this.setPhone(phone.replaceAll(&quot;[\\s\\-()]&quot;, &quot;&quot;)); // drop all non-digit characters</span>
+<span class="fc" id="L31">    	this.setAddress(address);</span>
+<span class="fc" id="L32">    	this.mst = MonthlySelectionType.RW;</span>
+<span class="fc" id="L33">    	this.ID = IdGenerator.newID();</span>
+<span class="fc" id="L34">    	this.tod = &quot;Fri&quot;;</span>
+<span class="fc" id="L35">    	this.dow = &quot;PM&quot;;</span>
+<span class="fc" id="L36">    }</span>
+<span class="fc" id="L37">    public Subscriber (String name, String email, String phone, Address address, String fb, String tw) {</span>
+<span class="fc" id="L38">    	this.setName(name);</span>
+<span class="fc" id="L39">    	this.setEmail(email);</span>
+<span class="fc" id="L40">    	this.setPhone(phone.replaceAll(&quot;[\\s\\-()]&quot;, &quot;&quot;)); // drop all non-digit characters</span>
+<span class="fc" id="L41">    	this.setAddress(address);</span>
+<span class="fc" id="L42">    	this.twitter = tw;</span>
+<span class="fc" id="L43">    	this.facebook = fb;</span>
+<span class="fc" id="L44">    	this.mst = MonthlySelectionType.RW;</span>
+<span class="fc" id="L45">    	this.ID = IdGenerator.newID();</span>
+<span class="fc" id="L46">    	this.tod = &quot;Fri&quot;;</span>
+<span class="fc" id="L47">    	this.dow = &quot;PM&quot;;</span>
+<span class="fc" id="L48">    }</span>
+<span class="fc" id="L49">    public Subscriber (String name, String email, String phone) {</span>
+<span class="fc" id="L50">    	this.setName(name);</span>
+<span class="fc" id="L51">    	this.setEmail(email);</span>
+<span class="fc" id="L52">    	this.setPhone(phone.replaceAll(&quot;[\\s\\-()]&quot;, &quot;&quot;)); // drop all non-digit characters</span>
+<span class="fc" id="L53">    	this.mst = MonthlySelectionType.RW;</span>
+<span class="fc" id="L54">    	this.ID = IdGenerator.newID();</span>
+<span class="fc" id="L55">    	this.tod = &quot;Fri&quot;;</span>
+<span class="fc" id="L56">    	this.dow = &quot;PM&quot;;</span>
+<span class="fc" id="L57">    }</span>
+
+    private boolean isMatchName(String kw) {
+<span class="fc" id="L60">    	String regex = &quot;(?i).*&quot; + kw + &quot;.*&quot;;</span>
+<span class="fc" id="L61">    	return this.getName().matches(regex);</span>
+    }
+
+    private boolean isMatchEmail(String kw) {
+<span class="nc" id="L65">    	String regex = &quot;(?i).*&quot; + kw + &quot;.*&quot;;</span>
+<span class="nc" id="L66">    	return this.getEmail().matches(regex);</span>
+    }
+
+    private boolean isMatchPhone(String kw) {
+<span class="nc" id="L70">    	String s = kw.replaceAll(&quot;[\\s\\-()]&quot;, &quot;&quot;); // drop all non-digit characters from search string</span>
+<span class="nc" id="L71">    	String regex = &quot;(?i).*&quot; + s + &quot;.*&quot;;</span>
+<span class="nc" id="L72">    	return this.getPhone().matches(regex);</span>
+    }
+    public boolean isMatch(String kw) {
+<span class="pc bpc" id="L75" title="5 of 6 branches missed.">    	if (isMatchName(kw) || isMatchEmail(kw) || isMatchPhone(kw)) {</span>
+<span class="fc" id="L76">    		return true;</span>
+<span class="nc" id="L77">    	} else return false;</span>
+    }
+
+    public int getID() {
+<span class="fc" id="L81">    	return this.ID;</span>
+    }
+
+    public void updateInfo(String name, String email, String phone) {
+<span class="fc" id="L85">    	this.setName(name);</span>
+<span class="fc" id="L86">    	this.setEmail(email);</span>
+<span class="fc" id="L87">    	this.setPhone(phone);</span>
+<span class="fc" id="L88">    }</span>
+    
+    public MonthlySelectionType getPreference() {
+<span class="fc" id="L91">    	return mst;</span>
+    }
+    
+    public void setPreference(MonthlySelectionType t) {
+<span class="fc" id="L95">    	this.mst = t;</span>
+<span class="fc" id="L96">    }</span>
+	public String getPhone() {
+<span class="fc" id="L98">		return phone;</span>
+	}
+	public void setPhone(String phone) {
+<span class="fc" id="L101">		this.phone = phone;</span>
+<span class="fc" id="L102">	}</span>
+	public String getName() {
+<span class="fc" id="L104">		return name;</span>
+	}
+	public void setName(String name) {
+<span class="fc" id="L107">		this.name = name;</span>
+<span class="fc" id="L108">	}</span>
+	public String getEmail() {
+<span class="fc" id="L110">		return email;</span>
+	}
+	public void setEmail(String email) {
+<span class="fc" id="L113">		this.email = email;</span>
+<span class="fc" id="L114">	}</span>
+	public List&lt;Shipment&gt; getShipmentList() {
+<span class="fc" id="L116">		return shipmentList;</span>
+	}
+	public void setShipmentList(List&lt;Shipment&gt; shipmentList) {
+<span class="fc" id="L119">		this.shipmentList = shipmentList;</span>
+<span class="fc" id="L120">	}</span>
+	public String getTod() {
+<span class="nc" id="L122">		return tod;</span>
+	}
+	public void setTod(String tod) {
+<span class="nc" id="L125">		this.tod = tod;</span>
+<span class="nc" id="L126">	}</span>
+	public String getDow() {
+<span class="nc" id="L128">		return dow;</span>
+	}
+	public void setDow(String dow) {
+<span class="nc" id="L131">		this.dow = dow;</span>
+<span class="nc" id="L132">	}</span>
+	public Address getAddress() {
+<span class="nc" id="L134">		return address;</span>
+	}
+	public void setAddress(Address address) {
+<span class="fc" id="L137">		this.address = address;</span>
+<span class="fc" id="L138">	}</span>
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

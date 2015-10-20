@@ -1,0 +1,119 @@
+<project basedir="." xmlns:sonar="antlib:org.sonar.ant" xmlns:ivy="antlib:org.apache.ivy.ant" default="test-report">
+ 
+    <property name="src.dir" value="../src" />
+    <property name="test.src.dir" value="../test" />
+    <property name="build.dir" value="../build" />
+    <property name="classes.dir" value="${build.dir}/classes" />
+    <property name="test.classes.dir" value="${build.dir}/test-classes" />
+    <property name="reports.dir" value="${build.dir}/reports" />
+ 
+        <!-- Sonar connection details here-->
+ 
+    <property name="sonar.projectKey" value="org.adrian:hello" />
+    <property name="sonar.projectVersion" value="0.0.1-SNAPSHOT" />
+    <property name="sonar.projectName" value="Adrian Hello" />
+ 
+    <property name="sonar.sources" value="${src.dir}" />
+    <property name="sonar.binaries" value="${classes.dir}" />
+    <property name="sonar.tests" value="${test.src.dir}" />
+ 
+    <property name="sonar.junit.reportsPath" value="${reports.dir}/junit" />
+    <property name="sonar.dynamicAnalysis" value="reuseReports" />
+    <property name="sonar.java.coveragePlugin" value="jacoco" />
+    <property name="sonar.jacoco.reportPath" value="${build.dir}/jacoco.exec" />
+ 
+    <target name="clean" description="Cleanup build files">
+        <delete dir="${build.dir}"/>
+    </target>
+ 
+    <target name="ivy-check">
+        <available file="${user.home}/.ant/lib/ivy.jar" property="ivy.isInstalled"/>
+    </target>
+ 
+    <target name="bootstrap" description="Install ivy" depends="ivy-check" unless="ivy.isInstalled">
+        <mkdir dir="${user.home}/.ant/lib"/>
+        <get dest="${user.home}/.ant/lib/ivy.jar" src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.3.0/ivy-2.3.0.jar"/>
+    </target>
+ 
+    <target name="resolve" depends="bootstrap" description="Download dependencies and setup classpaths">
+        <ivy:resolve/>
+        <ivy:report todir='${reports.dir}/ivy' graph='false' xml='false'/>
+ 
+        <ivy:cachepath pathid="compile.path" conf="compile"/>
+        <ivy:cachepath pathid="test.path"    conf="test"/>
+        <ivy:cachepath pathid="build.path"   conf="build"/>
+    </target>
+ 
+    <target name="init" depends="resolve" description="Create build directories">
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${test.classes.dir}"/>
+        <mkdir dir="${reports.dir}/"/>
+        <mkdir dir="${reports.dir}/junit"/>
+    </target>
+ 
+    <target name="compile" depends="init" description="Compile source code">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" debug="true" classpathref="compile.path"/>
+    </target>
+ 
+    <target name="compile-tests" depends="compile" description="Compile test source code">
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" includeantruntime="false" debug="true">
+            <classpath>
+                <path refid="test.path"/>
+                <pathelement path="${classes.dir}"/>
+            </classpath>
+        </javac>
+    </target>
+         
+    <target name="junit" depends="compile-tests" description="Run unit tests and code coverage reporting">
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="build.path"/>
+        <jacoco:coverage destfile="${build.dir}/jacoco.exec" xmlns:jacoco="antlib:org.jacoco.ant">
+            <junit haltonfailure="no" fork="true" forkmode="once">
+                <classpath>
+                    <path refid="test.path"/>
+                    <pathelement path="${classes.dir}"/>
+                    <pathelement path="${test.classes.dir}"/>
+                </classpath>
+                <formatter type="xml"/>
+                <batchtest todir="${reports.dir}/junit">
+                    <fileset dir="${test.src.dir}">
+                        <include name="**/*Test*.java"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
+    </target>
+         
+    <target name="test-report" depends="junit"> 
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"  classpathref="build.path"/>
+        <jacoco:report xmlns:jacoco="antlib:org.jacoco.ant">
+            <executiondata>
+                <file file="${build.dir}/jacoco.exec" />
+            </executiondata>
+ 
+            <structure name="Coverage Report">
+                <classfiles>
+                    <fileset dir="${classes.dir}" />
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="${src.dir}" />
+                </sourcefiles>
+            </structure>
+             
+            <html destdir="${reports.dir}" />
+        </jacoco:report>
+	 <delete dir="${classes.dir}"/>
+	  <delete dir="${test.classes.dir}"/>
+    </target>
+ 
+    <!--<target name="sonar" depends="test-report" description="Upload metrics to Sonar">
+        <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml" classpathref="build.path"/>
+ 
+        <ivy:cachepath pathid="sonar.libraries" conf="compile"/>
+ 
+        <sonar:sonar xmlns:sonar="antlib:org.sonar.ant"/>
+    </target>-->
+ 
+    <target name="clean-all" depends="clean" description="Additionally purge ivy cache">
+        <ivy:cleancache/>
+    </target>
+</project>
